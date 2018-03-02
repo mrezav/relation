@@ -2,6 +2,7 @@
 
 use App\User;
 use App\Profile;
+use App\Post;
 
 Route::get('/', function () {
     return view('welcome');
@@ -85,6 +86,57 @@ Route::get('/delete_profile', function(){
 	$user->profile()->delete();
 
 	return $user;
+});
+
+Route::get('/create_post', function() {
+	// $user = User::create([
+	// 	'name' => 'Reza',
+	// 	'email' => 'reza@vahlevi.com',
+	// 	'password' => bcrypt('Password')
+	// ]);
+
+	// $user = User::findOrFail(1);
+
+	$user->post()->create([
+		'title' => 'Postingan kedua', 
+		'body' => 'Ini adalah isi dari postingan kedua reza'
+	]);
+
+	return "Berhasil create post";
+});
+
+Route::get('read_post', function(){
+	$user = User::findOrFail(1);
+	$posts = $user->post()->get();
+ 	
+ 	foreach($posts as $result){
+ 		$data[] = [
+ 			'Nama' => $result->user->name,
+ 			'title' => $result->title,
+ 			'body' => $result->body
+ 		];
+ 	}
+
+ 	return $data;
+});
+
+Route::get('/update_post', function(){
+	$user = User::findOrFail(1);
+
+	$user->post()->where('id',2)->update(['title' => 'postingan kedua']);
+
+	return 'success';
+});
+
+Route::get('/delete_post', function(){
+	$user = User::findOrFail(2);
+
+	//Tidak akan bisa menghapus row dengan user_id 2 karena pada objek user hanya ada user id 1
+	// $user->post()->whereUserId(2)->delete(); 
+	$user->post()->whereUserId(2)->delete();
+	// $user->post()->delete();
+
+	return "Success";
 });
 
 Route::get('/tes_eloquent', function(){

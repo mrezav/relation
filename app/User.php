@@ -27,9 +27,15 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    
     public function profile()
     {
         return $this->hasOne(Profile::class,'user_id','id');
         //hasOne adalah relasi nya dan parameter nya(class model,foreign_key,primary key)
+    }
+
+    public function post()
+    {
+        return $this->hasMany(Post::class,'user_id','id');
     }
 }
