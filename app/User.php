@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','role_id'
     ];
 
     /**
@@ -34,7 +34,7 @@ class User extends Authenticatable
         //hasOne adalah relasi nya dan parameter nya(class model,foreign_key,primary key)
     }
 
-    public function post()
+    public function posts()
     {
         return $this->hasMany(Post::class,'user_id','id');
     }
