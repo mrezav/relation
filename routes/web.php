@@ -5,6 +5,7 @@ use App\Profile;
 use App\Post;
 use App\Category;
 use App\Role;
+use App\Portfolio;
 
 Route::get('/', function () {
     return view('welcome');
@@ -248,6 +249,73 @@ Route::get('create_all', function(){
 		'slug' => str_slug('New Category','-'),
 		'category' => 'Ini adalah kategori yang baru'
 	]);
+
+	return "Success";
+});
+
+//create comment from table post/portfolio
+Route::get('create/comment', function(){
+	$post = Post::findOrFail(1);
+	$post->comments()->create([
+		'user_id' => 2,
+		'content' => 'komentar untuk post dari user 2'
+	]);
+
+	// $portfolio = Portfolio::findOrFail(2);
+	// $portfolio->comments()->create([
+	// 	'user_id' => 2,
+	// 	'content' => 'komentar balasan dari user 2'
+	// ]);
+
+	return "Success";
+});
+
+
+Route::get('read/comment', function(){ 
+	// menampilkan nama user, comment dan title untuk table post dengan commentable_id 1
+	$post = Post::findOrFail(1);
+	$comments = $post->comments;
+	foreach ($comments as $comment) {
+		echo $comment->user->name.' - '.$comment->content.' ( '. $comment->commentable->title .' ) <br>';
+	}
+
+	// menampilkan nama user, comment dan title untuk table postfolio dengan commentable_id 2
+	// $portfolio = Portfolio::findOrFail(1);
+	// $comments = $portfolio->comments;
+
+	// foreach ($comments as $comment) {
+	// 	echo $comment->user->name.' - '.$comment->content.' ( '. $comment->commentable->title .' ) <br>';
+	// }
+
+	// return $comments;
+});
+
+//Update row di table comment
+Route::get('update/comment', function(){
+	// $post = Post::findOrFail(1);  							//membuat instance objeck dari class Post dengan id 1
+	// $comment = $post->comments()->where('id',1)->first();	//memanggil row dari table comment dengan id 1 
+
+	// $comment->update([
+	// 	'content' => 'Komentar ini telah di update'
+	// ]);														//mengubah isi field content 
+
+	$portfolio = Portfolio::findOrFail(2);
+	$comment = $portfolio->comments()->where('id',6)->first();
+
+	$comment->update([
+		'content' => 'Komentar portfolio ini telah di update'
+	]);
+
+	return "Success";
+});
+
+//Menghapus row di table comment
+Route::get('delete/comment', function(){ 
+	// $post = Post::findOrFail(1);							//membat instance objeck dari class Post yg id 1
+	// $post->comments()->where('id',5)->first()->delete();	//menghapus row id 5 di comment menggunakan method comments
+
+	$portfolio = Portfolio::findOrFail(1);
+	$portfolio->comments()->where('id',4)->first()->delete();
 
 	return "Success";
 });
