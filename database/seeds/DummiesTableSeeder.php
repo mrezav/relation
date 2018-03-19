@@ -71,5 +71,19 @@ class DummiesTableSeeder extends Seeder
         ];
  
         DB::table('comments')->insert($comments);
+
+        $tags = [
+        	['name' => 'Post'], 
+        	['name' => 'Portfolio'],
+        ];
+
+        DB::table('tags')->insert($tags);
+
+        $taggables = [
+        	['tag_id' => '1', 'taggable_id' => '1','taggable_type' => 'App\Post'],
+        	['tag_id' => '2', 'taggable_id' => '1','taggable_type' => 'App\Portfolio'],
+        ];
+
+        DB::table('taggables')->insert($taggables);
     }
 }

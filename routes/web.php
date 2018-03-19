@@ -6,6 +6,7 @@ use App\Post;
 use App\Category;
 use App\Role;
 use App\Portfolio;
+use App\Tag;
 
 Route::get('/', function () {
     return view('welcome');
@@ -318,4 +319,45 @@ Route::get('delete/comment', function(){
 	$portfolio->comments()->where('id',4)->first()->delete();
 
 	return "Success";
+});
+
+//membaca tags dari table post
+Route::get('tag/read', function(){
+	// $post = Post::findOrFail(1);
+
+	// foreach ($post->tags as $tag) {
+	// 	echo $tag->name."<br>";
+	// }
+
+	$portfolio = Portfolio::findOrFail(1);
+
+	foreach ($portfolio->tags as $tag) {
+		echo $tag->name."<br>";
+	}
+});
+
+//membuat relasi antara tag dan post/portfolio
+Route::get('tag/attach', function(){
+	$post = Post::findOrFail(1);
+	$post->tags()->attach([4,7]);
+
+	// $portfolio = Portfolio::findOrFail(1);
+	// $portfolio->tags()->attach([4,6]);
+
+	return "Success";
+});
+
+//menghapus relasi antara tag dan post/portfolio
+Route::get('tag/detach', function(){
+	// $post = Post::findOrFail(1);
+	// $post->tags()->detach([5,7]);
+
+	$portfolio = Portfolio::find(1);
+	$portfolio->tags()->detach([4,6]);
+});
+
+//menggunakan sync untuk menghindari duplikasi data dengan parameter ke 2 false agar data sebelumnya tidak terhapus  
+Route::get('tag/sync', function(){
+	$post = Post::findOrFail(1);
+	$post->tags()->sync([1,4,6], false); 		
 });
